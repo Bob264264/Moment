@@ -1,0 +1,37 @@
+'''
+Created on Nov 22, 2015
+
+@author: William's PC
+'''
+def formatDate (date):
+    yr = date[0:4]
+    mo = date[5:7]
+    da = date[8:10]
+    return "%s/%s/%s" % (int(mo), int(da), int(yr))
+
+def write_dict_data_to_csv_file(csv_file_path, dict_data):
+    import csv
+    csv_file = open(csv_file_path, 'wb')
+    writer = csv.writer(csv_file)
+    
+    headers = dict_data.keys()
+    writer.writerow(headers)
+    for i in range(0, len(dict_data['Date'])):
+        line = []
+        for field in headers:
+            line.append(dict_data[field][i])
+        writer.writerow(line)
+        
+    csv_file.close()
+
+import json
+with open('C:/Users/William\'s PC/Dropbox/Attachments/moment.json') as data_file:
+    data = json.load(data_file)
+
+mydict = {"Date":[], "Minutes":[], "Pickups":[]}
+for i in range(len(data['days'])-1, 0, -1):
+    mydict['Date'].append(formatDate(data['days'][i]['date']))   
+    mydict['Minutes'].append(data['days'][i]['minuteCount'])
+    mydict['Pickups'].append(data['days'][i]['pickupCount'])
+
+write_dict_data_to_csv_file('C:/Users/William\'s PC/Dropbox/Attachments/moment.csv', mydict)
